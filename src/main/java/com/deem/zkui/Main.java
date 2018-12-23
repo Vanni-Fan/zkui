@@ -49,9 +49,10 @@ public class Main {
 
         logger.debug("Starting ZKUI!");
         Properties globalProps = new Properties();
-        File f = new File("config.cfg");
+        String filename = args.length<1 ? "./config.cfg" : args[0];
+        File f = new File(filename);
         if (f.exists()) {
-            globalProps.load(new FileInputStream("config.cfg"));
+            globalProps.load(new FileInputStream(filename));
         } else {
             System.out.println("Please create config.cfg properties file and then execute the program!");
             System.exit(1);
@@ -98,6 +99,7 @@ public class Main {
 
             ServerConnector https = new ServerConnector(server, new SslConnectionFactory(sslContextFactory, HttpVersion.HTTP_1_1.asString()), new HttpConnectionFactory(https_config));
             https.setPort(Integer.parseInt(globalProps.getProperty("serverPort")));
+            https.setHost(globalProps.getProperty("serverHost"));
             server.setConnectors(new Connector[]{https});
         } else {
             if(globalProps.getProperty("X-Forwarded-For").equals("true")) {
@@ -105,6 +107,7 @@ public class Main {
             }
             ServerConnector http = new ServerConnector(server, new HttpConnectionFactory(http_config));
             http.setPort(Integer.parseInt(globalProps.getProperty("serverPort")));
+            http.setHost(globalProps.getProperty("serverHost"));
             server.setConnectors(new Connector[]{http});
         }
 
