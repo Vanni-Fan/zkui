@@ -1,0 +1,14 @@
+[Unit]
+Description=Zookeeper UI
+After=network.target remote-fs.target nss-lookup.target zookeeper.service
+Wants=zookeeper.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/java -Xms32m -Xmx64m -jar /YOUR-ZKUI-PATH/zkui.jar /YOUR-ZKUI-PATH/config.cfg
+PIDFile=/YOUR-ZKUI-PATH/zkui.pid
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target
